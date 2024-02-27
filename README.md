@@ -1,0 +1,1 @@
+# find-secrets-in-code-and-add-their-paths-on-confluence-page-and-send-alerts-on-slack
