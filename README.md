@@ -1,1 +1,1 @@
-# find-secrets-in-code-and-add-their-paths-on-confluence-page-and-send-alerts-on-slack
+# find-secrets-in-code-to-alert-on-slack-and-track-on-confluence
