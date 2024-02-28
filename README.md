@@ -21,10 +21,15 @@ Following are the prerequisites to be met before you begin:
    - `atlassian-python-api`
 - Following environment variables related to confluence are set:
    - `CONFLUENCE_SITE`
+      - Example: `https://mydomain.atlassian.net`
    - `CONFLUENCE_USER_EMAIL_ID`
+      - Example: `myname@mydomain.com`
    - `CONFLUENCE_USER_TOKEN`
+      - Example: `__REDACTED__`
    - `CONFLUENCE_PAGE_TITLE`
+      - Example: `Secrets Detected`
    - `CONFLUENCE_PAGE_SPACE`
+      - Example: `docs`
 
 ### Execution Instructions
 
