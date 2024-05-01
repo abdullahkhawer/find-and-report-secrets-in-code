@@ -1,0 +1,20 @@
+find_secrets_in_code_to_alert_on_slack_and_track_on_confluence:
+  stage: test
+  image: ubuntu:22.04
+  variables:
+    GIT_DEPTH: 1
+    PATH_TO_GIT_REPO: "./"
+  before_script:
+    - apt-get update && apt install -y git
+    - git fetch origin ${CI_DEFAULT_BRANCH}
+  only:
+    #- master
+    - dpt/ak-test-branch
+  script:
+    - ls
+    - git clone https://github.com/abdullahkhawer/find-secrets-in-code-to-alert-on-slack-and-track-on-confluence
+    - cd find-secrets-in-code-to-alert-on-slack-and-track-on-confluence
+    - ls
+    #- chmod +x your_script.sh
+    #- ./your_script.sh
+    #- python python_script.py
