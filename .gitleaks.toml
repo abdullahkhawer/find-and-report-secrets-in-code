@@ -11,12 +11,7 @@ useDefault = true
 # secrets will be detected for said commit. The same logic applies for regexes and paths.
 [allowlist]
 description = "Global allowlisted paths, regexes and stopwords"
-paths = [
-  '''\.gitleaks\.toml''',
-  '''\.gitleaks\.toml''',
-  '''gitleaks-report-detailed.json''',
-  '''gitleaks-report.json'''
-]
+paths = []
 
 regexTarget = "match"
 
