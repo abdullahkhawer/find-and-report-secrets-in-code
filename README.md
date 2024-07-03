@@ -48,7 +48,7 @@ Below you can find an example of the Slack notification:
 Following are the prerequisites to be met once before you begin:
 
 - Following packages are installed on your system:
-   - In case of Linux, install the following packages using either `./installation/linux_install_packages.sh` script or manually:
+   - In case of Linux, install the following packages by running either `./installation/linux_install_packages.sh` command or by installing them manually:
       - `git`
       - `jq`
       - `bash`
@@ -64,7 +64,7 @@ Following are the prerequisites to be met once before you begin:
          - Using `pip`
       - `requests`
          - Using `pip`
-   - In case of macOS, install the following packages using either `./installation/macos_install_packages.sh` script or manually:
+   - In case of macOS, install the following packages by running either `./installation/macos_install_packages.sh` command or by installing them manually:
       - `git`
       - `jq`
       - `bash`

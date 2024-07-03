@@ -132,6 +132,9 @@ The variables referred using `$` are supposed to be created on the repository un
 
 The image used in this GitLab CI job is built using the Dockerfile that is present in a repository here: `https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/master/docker/Dockerfile`
 
+An example of build command is below:
+`docker buildx build --platform linux/amd64 -t "abdullahkhawer/find-and-report-secrets-in-code:latest" --no-cache -f ./docker/Dockerfile .`
+
 The image used is this one which is publicly available.
 
 ## Notes
