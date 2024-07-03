@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - Update print command to fix a word.
 
 
-## [1.0.0] - 2024-05-07
+## [1.0.0] - 2024-06-06
 
 [1.0.0]: https://github.com/abdullahkhawer/find-and-report-secrets-in-code/releases/tag/v1.0.0
 
