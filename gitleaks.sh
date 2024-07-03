@@ -8,7 +8,7 @@ rm -rf ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json
 rm -rf ./gitleaks-report.json
 
 # run Gitleaks to find secrets and generate a detailed report in JSON for the secrets found
-echo "Running Gitleaks to find secrets and generate a detailed report in JSON for the secrets found..."
+echo "Running Gitleaks to find secrets and generating a detailed report in JSON for the secrets found..."
 gitleaks detect -r ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json -f json -s ${PATH_TO_GIT_REPO} --redact --no-git
 
 # create a final report in JSON using the detailed report having relevant information only
