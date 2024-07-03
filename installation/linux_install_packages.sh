@@ -12,9 +12,11 @@ git --version && jq --version && bash --version && make --version && wget --vers
 pip install atlassian-python-api pytz requests --break-system-packages
 
 # install Gitleaks
-rm -rf /usr/local/gitleaks && git clone https://github.com/gitleaks/gitleaks.git /usr/local/gitleaks
+sudo rm -rf /usr/local/gitleaks && sudo git clone https://github.com/gitleaks/gitleaks.git /usr/local/gitleaks
 cd /usr/local/gitleaks
-make build
+git config --global --add safe.directory /usr/local/gitleaks
+sudo git checkout tags/v8.18.4
+sudo make build
 cd /
 export PATH=$PATH:/usr/local/gitleaks
 echo -n "gitleaks " && gitleaks version
