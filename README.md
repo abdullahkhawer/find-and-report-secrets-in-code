@@ -47,7 +47,7 @@ Below you can find an example of the Slack notification:
 
 Following are the prerequisites to be met once before you begin:
 
-- Following packages are installed on your system:
+- Following packages should be installed on your system:
    - In case of Linux, install the following packages by running either `./installation/linux_install_packages.sh` command or by installing them manually:
       - `git`
       - `jq`
