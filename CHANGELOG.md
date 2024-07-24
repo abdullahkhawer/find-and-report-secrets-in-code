@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [1.1.0] - 2024-07-24
 
+[1.1.0]: https://github.com/abdullahkhawer/find-and-report-secrets-in-code/releases/tag/v1.1.0
+
 ### 🚀 Features
 
 - Update shell script to prepare and add URL for each finding in the JSON report.
