@@ -15,21 +15,24 @@ Below you can find an example of the JSON report generated:
 ```json
 [
   {
-    "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
-    "File": "./code/main.py",
+    "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+    "File": "scripts/main.py",
     "Line No.": "11",
-    "Secret Type": "hashicorp-tf-password",
+    "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/scripts/main.py#L11",
+    "Secret Type": "generic-api-key",
     "Commit": "__REDACTED__",
     "Author": "__REDACTED__"
   },
   {
     "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
-    "File": "./code/main.conf",
-    "Line No.": "30",
+    "File": "configurations/main.tf",
+    "Line No.": "6",
+    "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/configurations/main.tf#L6",
     "Secret Type": "hashicorp-tf-password",
     "Commit": "__REDACTED__",
     "Author": "__REDACTED__"
   }
+  ...
 ]
 ```
 
@@ -46,8 +49,16 @@ Below you can find an example of the Slack notification:
 ### Execution Instructions
 
 Set the following environment variables:
-   - `PATH_TO_GIT_REPO`
-      - Description: To keep the size of the git repository to be cloned lower to make the job faster.
+   - `LOCAL_PATH_TO_GIT_REPO`
+      - Description: Local path to the Git repository.
+      - Example: `/Users/Abdullah.Khawer/Desktop/my-projects/my-repo`
+      - Requirement: REQUIRED
+   - `REMOTE_PATH_TO_GIT_REPO`
+      - Description: Remote path to the Git repository.
+      - Example: `https://gitlab.com/my-projects/my-repo`
+      - Requirement: REQUIRED
+   - `BRANCH_NAME`
+      - Description: Name of the branch in the Git repository against which secrets detection tool will be executed.
       - Example: `/Users/Abdullah.Khawer/Desktop/myrepo`
       - Requirement: REQUIRED
    - `CONFLUENCE_ENABLED`
@@ -85,11 +96,11 @@ Set the following environment variables:
       - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
 
 And then simply run the following 4 commands:
-- `docker run --platform linux/amd64 -it -e PATH_TO_GIT_REPO=/git_repo -e CONFLUENCE_ENABLED=1 -e CONFLUENCE_SITE=$CONFLUENCE_SITE -e CONFLUENCE_USER_EMAIL_ID=$CONFLUENCE_USER_EMAIL_ID -e CONFLUENCE_USER_TOKEN=$CONFLUENCE_USER_TOKEN -e CONFLUENCE_PAGE_TITLE=$CONFLUENCE_PAGE_TITLE -e CONFLUENCE_PAGE_SPACE=$CONFLUENCE_PAGE_SPACE -e SLACK_ENABLED=1 -e SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL -v $PATH_TO_GIT_REPO:/git_repo abdullahkhawer/find-and-report-secrets-in-code:latest`
+- `docker run --platform linux/amd64 -it -e LOCAL_PATH_TO_GIT_REPO=$LOCAL_PATH_TO_GIT_REPO -e REMOTE_PATH_TO_GIT_REPO=$REMOTE_PATH_TO_GIT_REPO -e BRANCH_NAME=$BRANCH_NAME -e CONFLUENCE_ENABLED=$CONFLUENCE_ENABLED -e CONFLUENCE_SITE=$CONFLUENCE_SITE -e CONFLUENCE_USER_EMAIL_ID=$CONFLUENCE_USER_EMAIL_ID -e CONFLUENCE_USER_TOKEN=$CONFLUENCE_USER_TOKEN -e CONFLUENCE_PAGE_TITLE=$CONFLUENCE_PAGE_TITLE -e CONFLUENCE_PAGE_SPACE=$CONFLUENCE_PAGE_SPACE -e SLACK_ENABLED=$SLACK_ENABLED -e SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL -v $LOCAL_PATH_TO_GIT_REPO:$LOCAL_PATH_TO_GIT_REPO abdullahkhawer/find-and-report-secrets-in-code:latest`
 - `export PATH=$PATH:/usr/local/gitleaks`
 - `bash /find-and-report-secrets-in-code/gitleaks.sh`
 - `python3 /find-and-report-secrets-in-code/main.py TIME_ZONE REPOSITORY_NAME BRANCH_NAME [JSON_REPORT_URL]`
-   - Example: `python3 /find-and-report-secrets-in-code/main.py Europe/Amsterdam myproj/myrepo master`
+   - Example: `python3 /find-and-report-secrets-in-code/main.py Europe/Amsterdam my-projects/my-repo master`
    - Note: Details about supported time zones and their constant names can be found here: [pypi.org > project > pytz > Helpers](https://pypi.org/project/pytz/#:~:text=through%20multiple%20timezones.-,Helpers,-There%20are%20two)
 
 ## Automatically via CI/CD Pipeline

@@ -15,21 +15,24 @@ Below you can find an example of the JSON report generated:
 ```json
 [
   {
-    "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
-    "File": "./code/main.py",
+    "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+    "File": "scripts/main.py",
     "Line No.": "11",
-    "Secret Type": "hashicorp-tf-password",
+    "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/scripts/main.py#L11",
+    "Secret Type": "generic-api-key",
     "Commit": "__REDACTED__",
     "Author": "__REDACTED__"
   },
   {
     "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
-    "File": "./code/main.conf",
-    "Line No.": "30",
+    "File": "configurations/main.tf",
+    "Line No.": "6",
+    "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/configurations/main.tf#L6",
     "Secret Type": "hashicorp-tf-password",
     "Commit": "__REDACTED__",
     "Author": "__REDACTED__"
   }
+  ...
 ]
 ```
 
@@ -82,8 +85,16 @@ Following are the prerequisites to be met once before you begin:
 ### Execution Instructions
 
 Once all the prerequisites are met, set the following environment variables:
-   - `PATH_TO_GIT_REPO`
-      - Description: To keep the size of the git repository to be cloned lower to make the job faster.
+   - `LOCAL_PATH_TO_GIT_REPO`
+      - Description: Local path to the Git repository.
+      - Example: `/Users/Abdullah.Khawer/Desktop/my-projects/my-repo`
+      - Requirement: REQUIRED
+   - `REMOTE_PATH_TO_GIT_REPO`
+      - Description: Remote path to the Git repository.
+      - Example: `https://gitlab.com/my-projects/my-repo`
+      - Requirement: REQUIRED
+   - `BRANCH_NAME`
+      - Description: Name of the branch in the Git repository against which secrets detection tool will be executed.
       - Example: `/Users/Abdullah.Khawer/Desktop/myrepo`
       - Requirement: REQUIRED
    - `CONFLUENCE_ENABLED`
@@ -120,10 +131,10 @@ Once all the prerequisites are met, set the following environment variables:
       - Example: `[https://mydomain.atlassian.net](https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__)`
       - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
 
-And then simply run the following 3 commands in the correct order:
+And then simply run the following 2 commands:
 - `bash gitleaks.sh`
 - `python3 main.py TIME_ZONE REPOSITORY_NAME BRANCH_NAME [JSON_REPORT_URL]`
-   - Example: `python3 main.py Europe/Amsterdam myproj/myrepo master`
+   - Example: `python3 main.py Europe/Amsterdam my-projects/my-repo master`
    - Note: Details about supported time zones and their constant names can be found here: [pypi.org > project > pytz > Helpers](https://pypi.org/project/pytz/#:~:text=through%20multiple%20timezones.-,Helpers,-There%20are%20two)
 
 ## Automatically via CI/CD Pipeline

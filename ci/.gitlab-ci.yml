@@ -25,7 +25,7 @@
   stage: scan
   extends:
     - .find-secrets:variables
-  image: abdullahkhawer/find-and-report-secrets-in-code:1.0.0
+  image: abdullahkhawer/find-and-report-secrets-in-code:1.1.0
   before_script:
     - |
       if [ -n "$CONFLUENCE_ENABLED" ] && [ "$CONFLUENCE_ENABLED" -eq 1 ]; then
@@ -63,13 +63,15 @@
       fi
     - git fetch origin $CI_COMMIT_BRANCH
   script:
+    - export LOCAL_PATH_TO_GIT_REPO=$(pwd)
+    - export REMOTE_PATH_TO_GIT_REPO=$CI_PROJECT_URL
+    - export BRANCH_NAME=$CI_COMMIT_BRANCH
+    - export REPO_NAME=$CI_PROJECT_PATH
     - export PATH=$PATH:/usr/local/gitleaks
-    - export PATH_TO_GIT_REPO=$(pwd)
-    - export REPO_NAME=$(echo "$CI_PROJECT_DIR" | sed 's|/builds/||')
     - cd /find-and-report-secrets-in-code/
     - bash ./gitleaks.sh
-    - python3 main.py "Europe/Amsterdam" $REPO_NAME $CI_COMMIT_BRANCH $CI_JOB_URL/artifacts/raw/gitleaks-report.json
-    - cp ./gitleaks-report.json $PATH_TO_GIT_REPO/gitleaks-report.json
+    - python3 main.py "Europe/Amsterdam" $REPO_NAME $BRANCH_NAME $CI_JOB_URL/artifacts/raw/gitleaks-report.json
+    - cp ./gitleaks-report.json $LOCAL_PATH_TO_GIT_REPO/gitleaks-report.json
   artifacts:
     paths:
       - gitleaks-report.json
