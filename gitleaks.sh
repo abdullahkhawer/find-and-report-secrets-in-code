@@ -4,25 +4,25 @@ echo "Script Execution Started!"
 
 # remove Gitleaks reports if they exist already
 echo "Removing Gitleaks reports if they exist already..."
-rm -rf ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json
+rm -rf ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json
 rm -rf ./gitleaks-report.json
 
 # run Gitleaks to find secrets and generate a detailed report in JSON for the secrets found
 echo "Running Gitleaks to find secrets and generating a detailed report in JSON for the secrets found..."
-gitleaks detect -r ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json -f json -s ${PATH_TO_GIT_REPO} --redact --no-git
+gitleaks detect -r ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json -f json -s ${LOCAL_PATH_TO_GIT_REPO} --redact --no-git
 
 # create a final report in JSON using the detailed report having relevant information only
 echo "Creating a final report in JSON using the detailed report having relevant information only..."
 echo "[" > ./gitleaks-report.json
-cat ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read -r line; do
+cat ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read -r line; do
     description=$(jq -r '.Description' <<< "$line")
     start_line=$(jq -r '.StartLine' <<< "$line")
     file=$(jq -r '.File' <<< "$line")
-    file=$(echo "$file" | sed "s|^${PATH_TO_GIT_REPO}|.|")
+    file=$(echo "$file" | sed "s|^${LOCAL_PATH_TO_GIT_REPO}/||")
     secret_type=$(jq -r '.RuleID' <<< "$line")
 
     # use 'git blame' to find the commit id and author for each finding
-    blame=$(cd ${PATH_TO_GIT_REPO} && git blame -L "$start_line","$start_line" "$file" --porcelain)
+    blame=$(cd ${LOCAL_PATH_TO_GIT_REPO} && git blame -L "$start_line","$start_line" ./"$file" --porcelain)
     commit_id=$(echo "$blame" | awk 'NR==1' | awk -F ' ' '{print $1}')
     author=$(echo "$blame" | awk 'NR==2' | awk -F 'author ' '{print $2}')
 
@@ -31,10 +31,11 @@ cat ${PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read
         --arg desc "$description" \
         --arg file "$file" \
         --arg line_no "$start_line" \
+        --arg url "${REMOTE_PATH_TO_GIT_REPO}/-/blob/${BRANCH_NAME}/${file}#L${start_line}" \
         --arg type "$secret_type" \
         --arg commit "$commit_id" \
         --arg author "$author" \
-        '{"Description": $desc, "File": $file, "Line No.": $line_no, "Secret Type": $type, "Commit": $commit, "Author": $author}' >> ./gitleaks-report.json
+        '{"Description": $desc, "File": $file, "Line No.": $line_no, "Link": $url, "Secret Type": $type, "Commit": $commit, "Author": $author}' >> ./gitleaks-report.json
 
     echo "," >> ./gitleaks-report.json
 done
