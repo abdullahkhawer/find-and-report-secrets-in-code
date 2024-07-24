@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2024-07-24
+
+### 🚀 Features
+
+- Update shell script to prepare and add URL for each finding in the JSON report.
+- Update python script to improve logging, comments, pylint score from 1.44 to 9.25/10 by refactoring code, HTML content template to add link to the file reference where secret is detected and Slack notification message along with its format in case of both no secrets found and 1 or more secrets found.
+
+### 📚 Documentation
+
+- Update READMEs to add 2 new ENVs, add 1 new JSON field and fix some existing commands and descriptions mentioned.
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove unnecessary file from .gitignore.
+- Add 2 new variables and use image 1.1.0
+- Update version to v1.1.0
+
 ## [1.0.1] - 2024-07-03
 
 [1.0.1]: https://github.com/abdullahkhawer/find-and-report-secrets-in-code/releases/tag/v1.0.1
