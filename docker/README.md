@@ -1,6 +1,19 @@
-# Find and Report Secrets in Code
+# Quick Reference
 
-- Founder: Abdullah Khawer (LinkedIn: https://www.linkedin.com/in/abdullah-khawer/)
+-	**Maintained by**:
+	[Abdullah Khawer - LinkedIn](https://www.linkedin.com/in/abdullah-khawer)
+
+-	**Maintained at**:
+	[find-and-report-secrets-in-code - GitHub](https://github.com/abdullahkhawer/find-and-report-secrets-in-code)
+
+-	**Where to file issues**:
+	[https://github.com/abdullahkhawer/find-and-report-secrets-in-code/issues](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/issues)
+
+# Supported tags and respective `Dockerfile` links
+
+-	[`1.2.0`, `latest`](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/v1.2.0/docker/Dockerfile)
+
+# Find and Report Secrets in Code
 
 # Introduction
 
@@ -143,18 +156,18 @@ In the `rules` section, you specify rules for execution as `if` conditions. In t
 
 The variables referred using `$` are supposed to be created on the repository under `CI/CD Settings` page.
 
-The image used in this GitLab CI job is built using the Dockerfile that is present in a repository here: `https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/master/docker/Dockerfile`
-
 An example of build command is below:
 `docker buildx build --platform linux/amd64 -t "abdullahkhawer/find-and-report-secrets-in-code:latest" --no-cache -f ./docker/Dockerfile .`
-
-The image used is this one which is publicly available.
 
 ## Notes
 
 - A sample Gitleaks configuration file can be found here if interested in using it: `https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/master/.gitleaks.toml`
 - The Atlassian user should have access to the Confluence app, the `View` and `Add` permissions in the space on it and the `Can edit` permission on the page in that space. Also, you need to create an API token as the password won't work.
 
-For more details, check the following repository on GitHub: https://github.com/abdullahkhawer/find-and-report-secrets-in-code/
+For more details, check out the following repository on GitHub: https://github.com/abdullahkhawer/find-and-report-secrets-in-code/
+
+## License
+
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
 
 #### Any contributions, improvements and suggestions will be highly appreciated. 😊
