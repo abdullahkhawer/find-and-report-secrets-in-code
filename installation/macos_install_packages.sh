@@ -6,7 +6,7 @@ brew install git jq bash python python@3
 git --version && jq --version && bash --version && pip --version && python3 --version
 
 # install "Python Atlassian REST API Wrapper", "World timezone definitions, modern and historical" and "Requests" Python libraries
-pip install atlassian-python-api pytz requests || pip install atlassian-python-api pytz requests --break-system-packages
+pip install --no-cache-dir atlassian-python-api pytz requests || pip install atlassian-python-api pytz requests --break-system-packages
 
 # install Gitleaks
 sudo rm -rf /usr/local/gitleaks && sudo git clone https://github.com/gitleaks/gitleaks.git /usr/local/gitleaks

@@ -1,6 +1,6 @@
 # Find and Report Secrets in Code
 
-- Founder: Abdullah Khawer (LinkedIn: https://www.linkedin.com/in/abdullah-khawer/)
+- Founder: [Abdullah Khawer - LinkedIn](https://www.linkedin.com/in/abdullah-khawer)
 
 # Introduction
 
@@ -185,5 +185,9 @@ The image used is publicly available here: https://hub.docker.com/r/abdullahkhaw
 
 - A sample Gitleaks configuration file can be found here if interested in using it: `.gitleaks.toml`
 - The Atlassian user should have access to the Confluence app, the `View` and `Add` permissions in the space on it and the `Can edit` permission on the page in that space. Also, you need to create an API token as the password won't work.
+
+## License
+
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
 
 #### Any contributions, improvements and suggestions will be highly appreciated. 😊
