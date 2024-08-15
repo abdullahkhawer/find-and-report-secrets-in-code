@@ -168,6 +168,6 @@ For more details, check out the following repository on GitHub: https://github.c
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License - see the [LICENSE](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/master/docker/LICENSE) file for details.
 
 #### Any contributions, improvements and suggestions will be highly appreciated. 😊
