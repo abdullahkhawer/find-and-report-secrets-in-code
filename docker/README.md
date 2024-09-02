@@ -51,11 +51,9 @@ Below you can find an example of the JSON report generated:
 
 Note: In the actual execution, you will see the actual values instead of `__REDACTED__` values.
 
-Below you can find examples of the Slack notification messages in case of both no secrets found and 1 or more secrets found:
+Below you can find an example of the Slack notification messages in case of both no secrets found and 1 or more secrets found:
 
-![image](https://github.com/user-attachments/assets/b66c7111-3917-43d7-a7d7-984eb7283fb7)
-
-![image](https://github.com/user-attachments/assets/53a4dda0-7aa1-4bc9-b34a-302606cfb22a)
+![image](https://github.com/user-attachments/assets/0dfa93a5-bcc4-4370-8b25-1e30c783f059)
 
 # Usage Notes
 
