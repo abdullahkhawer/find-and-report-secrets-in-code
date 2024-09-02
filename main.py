@@ -164,39 +164,40 @@ with open("./gitleaks-report.json", "r", encoding='UTF-8') as file:
 secrets_count = len(data)
 
 # update HTML page template and find unique commit authors from the JSON data read
-print("Updating HTML page template and finding unique commit authors from the JSON data read...")
-authors = []
-rows = ""
-rows_count = 1
-for entry in data:
-    author = entry["Author"]
+if confluence_enabled == "1" or slack_enabled == "1":
+    print("Updating HTML page template and finding unique commit authors from the JSON data read...")
+    authors = []
+    rows = ""
+    rows_count = 1
+    for entry in data:
+        author = entry["Author"]
+        if confluence_enabled == "1":
+            description = entry["Description"]
+            file_reference = f'<a href="{entry["Link"]}">{entry["File"]}:{entry["Line No."]}</a>'
+            secret_type = entry["Secret Type"]
+            commit = entry["Commit"]
+            rows += row_template.format(
+                rows_count,
+                description,
+                file_reference,
+                secret_type,
+                commit,
+                author
+            )
+        if slack_enabled == "1":
+            authors.append(author)
+        rows_count = rows_count + 1
     if confluence_enabled == "1":
-        description = entry["Description"]
-        file_reference = f'<a href="{entry["Link"]}">{entry["File"]}:{entry["Line No."]}</a>'
-        secret_type = entry["Secret Type"]
-        commit = entry["Commit"]
-        rows += row_template.format(
-            rows_count,
-            description,
-            file_reference,
-            secret_type,
-            commit,
-            author
+        html_template = html_template.format(
+            repo_name,
+            branch_name,
+            time_now,
+            secrets_count,
+            rows
         )
     if slack_enabled == "1":
-        authors.append(author)
-    rows_count = rows_count + 1
-if confluence_enabled == "1":
-    html_template = html_template.format(
-        repo_name,
-        branch_name,
-        time_now,
-        secrets_count,
-        rows
-    )
-if slack_enabled == "1":
-    authors = list(set(authors))
-    authors.sort()
+        authors = list(set(authors))
+        authors.sort()
 
 # define the pattern to replace the respective div using repository and branch name
 if confluence_enabled == "1":
