@@ -13,7 +13,8 @@ gitleaks detect -r ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json -f js
 
 # create a final report in JSON using the detailed report having relevant information only
 echo "Creating a final report in JSON using the detailed report having relevant information only..."
-if grep -q "^\[\]\n$" ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json; then
+file_contents=$(cat ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json)
+if [ "$file_contents" != "[]" ]; then
     echo "[" > ./gitleaks-report.json
     cat ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read -r line; do
         description=$(jq -r '.Description' <<< "$line")
