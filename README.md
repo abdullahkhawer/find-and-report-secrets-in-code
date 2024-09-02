@@ -208,7 +208,7 @@ The variables referred using `$` are supposed to be created on the repository un
 
 ## Docker Image Details
 
-The Docker image used is built using the Dockerfile that is present in this repository here: [Dockerfile](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/tree/master/docker)
+The Docker image used is built using the Dockerfile that is present in this repository here: [Dockerfile](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/tree/master/docker/Dockerfile)
 
 Following build command is used on the root level in the GitHub repository: `docker buildx build --platform linux/amd64 -t "abdullahkhawer/find-and-report-secrets-in-code:latest" --no-cache -f ./docker/Dockerfile .`
 
