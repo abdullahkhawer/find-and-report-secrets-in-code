@@ -11,7 +11,7 @@
 
 # Supported tags and respective `Dockerfile` links
 
--	[`1.2.0`, `latest`](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/v1.2.0/docker/Dockerfile)
+-	[`1.3.0`, `latest`](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/v1.3.0/docker/Dockerfile)
 
 # Find and Report Secrets in Code
 
@@ -21,7 +21,7 @@ This repository has a Docker image that finds secrets in a git repository using 
 
 ❓ Where I can run this?
 
-👉🏻 This Docker image can be executed on any Windows, macOS or Linux system either locally or on a remote server. It can also be executed on a CI/CD pipeline.
+This solution can be executed on any macOS or Linux system either locally or on a remote server. It can also be executed on a CI/CD tool like on GitHub Actions, GitLab CI, etc, in a pipeline.
 
 Below you can find an example of the JSON report generated:
 
@@ -118,20 +118,51 @@ And then simply run the following 4 commands:
    - Example: `python3 /find-and-report-secrets-in-code/main.py Europe/Amsterdam my-projects/my-repo master`
    - Note: Details about supported time zones and their constant names can be found here: [pypi.org > project > pytz > Helpers](https://pypi.org/project/pytz/#:~:text=through%20multiple%20timezones.-,Helpers,-There%20are%20two)
 
-## Automatically via CI/CD Pipeline
+## Automatically via a CI/CD Pipeline
 
-### Setup Instructions
+### GitHub Actions - Setup Instructions
 
-In order to run it on any GitLab repository, add the following in the `.gitlab-ci.yml` file that is in the repository:
+In order to run it on any GitHub repository, add the following in the `.github-workflow.yml` file under the `.github/workflows/` directory in the repository:
+
+```
+name: find-and-report-secrets-in-code
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  find-and-report-secrets-in-code:
+    uses: abdullahkhawer/find-and-report-secrets-in-code/.github/workflows/.github-workflow.yml@master
+    with:
+      CONFLUENCE_ENABLED: "1"
+      CONFLUENCE_PAGE_TITLE: ${{ vars.CONFLUENCE_PAGE_TITLE }}
+      CONFLUENCE_PAGE_SPACE: ${{ vars.CONFLUENCE_PAGE_SPACE }}
+      SLACK_ENABLED: "1"
+    secrets:
+      CONFLUENCE_SITE: ${{ secrets.CONFLUENCE_SITE }}
+      CONFLUENCE_USER_EMAIL_ID: ${{ secrets.CONFLUENCE_USER_EMAIL_ID }}
+      CONFLUENCE_USER_TOKEN: ${{ secrets.CONFLUENCE_USER_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
+
+In the `on` section, you specify events can cause the workflow to run. In the above example, the job is only allowed to execute if something is pushed to the `master` branch.
+
+The variables referred using `$` are supposed to be created on the repository under `Repository secrets` and `Repository variables` depending on the type of variable from here: `Settings > Security > Secrets and variables > Actions`.
+
+### GitLab CI - Setup Instructions
+
+In order to run it on any GitLab repository, add the following in the `.gitlab-ci.yml` file on root level in the repository:
 
 ```
 include:
-  - remote: 'https://raw.githubusercontent.com/abdullahkhawer/find-and-report-secrets-in-code/master/ci/.gitlab-ci.yml'
+  - remote: 'https://raw.githubusercontent.com/abdullahkhawer/find-and-report-secrets-in-code/master/.gitlab/.gitlab-ci.yml'
 
 stages:
   - scan
 
-secrets_detection:
+find-and-report-secrets-in-code:
   stage: scan
   extends:
     - .find-secrets:scan
@@ -154,10 +185,13 @@ secrets_detection:
 
 In the `rules` section, you specify rules for execution as `if` conditions. In the above example, the job is only allowed to execute if it is a scheduled job for the `master` branch.
 
-The variables referred using `$` are supposed to be created on the repository under `CI/CD Settings` page.
+The variables referred using `$` are supposed to be created on the repository under `CI/CD Variables` from here: `Settings > CI/CD > Variables`.
 
-An example of build command is below:
-`docker buildx build --platform linux/amd64 -t "abdullahkhawer/find-and-report-secrets-in-code:latest" --no-cache -f ./docker/Dockerfile .`
+## Docker Image Details
+
+The Docker image used is built using the Dockerfile that is present in this repository here: [Dockerfile](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/tree/master/docker)
+
+Following build command is used on the root level in the GitHub repository: `docker buildx build --platform linux/amd64 -t "abdullahkhawer/find-and-report-secrets-in-code:latest" --no-cache -f ./docker/Dockerfile .`
 
 ## Notes
 

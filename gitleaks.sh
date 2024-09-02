@@ -13,34 +13,38 @@ gitleaks detect -r ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json -f js
 
 # create a final report in JSON using the detailed report having relevant information only
 echo "Creating a final report in JSON using the detailed report having relevant information only..."
-echo "[" > ./gitleaks-report.json
-cat ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read -r line; do
-    description=$(jq -r '.Description' <<< "$line")
-    start_line=$(jq -r '.StartLine' <<< "$line")
-    file=$(jq -r '.File' <<< "$line")
-    file=$(echo "$file" | sed "s|^${LOCAL_PATH_TO_GIT_REPO}/||")
-    secret_type=$(jq -r '.RuleID' <<< "$line")
+if grep -q "^\[\]\n$" ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json; then
+    echo "[" > ./gitleaks-report.json
+    cat ${LOCAL_PATH_TO_GIT_REPO}/gitleaks-report-detailed.json | jq -c '.[]' | while read -r line; do
+        description=$(jq -r '.Description' <<< "$line")
+        start_line=$(jq -r '.StartLine' <<< "$line")
+        file=$(jq -r '.File' <<< "$line")
+        file=$(echo "$file" | sed "s|^${LOCAL_PATH_TO_GIT_REPO}/||")
+        secret_type=$(jq -r '.RuleID' <<< "$line")
 
-    # use 'git blame' to find the commit id and author for each finding
-    blame=$(cd ${LOCAL_PATH_TO_GIT_REPO} && git blame -L "$start_line","$start_line" ./"$file" --porcelain)
-    commit_id=$(echo "$blame" | awk 'NR==1' | awk -F ' ' '{print $1}')
-    author=$(echo "$blame" | awk 'NR==2' | awk -F 'author ' '{print $2}')
+        # use 'git blame' to find the commit id and author for each finding
+        blame=$(cd ${LOCAL_PATH_TO_GIT_REPO} && git blame -L "$start_line","$start_line" ./"$file" --porcelain)
+        commit_id=$(echo "$blame" | awk 'NR==1' | awk -F ' ' '{print $1}')
+        author=$(echo "$blame" | awk 'NR==2' | awk -F 'author ' '{print $2}')
 
-    # append final JSON objects to the new report
-    jq -n \
-        --arg desc "$description" \
-        --arg file "$file" \
-        --arg line_no "$start_line" \
-        --arg url "${REMOTE_PATH_TO_GIT_REPO}/-/blob/${BRANCH_NAME}/${file}#L${start_line}" \
-        --arg type "$secret_type" \
-        --arg commit "$commit_id" \
-        --arg author "$author" \
-        '{"Description": $desc, "File": $file, "Line No.": $line_no, "Link": $url, "Secret Type": $type, "Commit": $commit, "Author": $author}' >> ./gitleaks-report.json
+        # append final JSON objects to the new report
+        jq -n \
+            --arg desc "$description" \
+            --arg file "$file" \
+            --arg line_no "$start_line" \
+            --arg url "${REMOTE_PATH_TO_GIT_REPO}/-/blob/${BRANCH_NAME}/${file}#L${start_line}" \
+            --arg type "$secret_type" \
+            --arg commit "$commit_id" \
+            --arg author "$author" \
+            '{"Description": $desc, "File": $file, "Line No.": $line_no, "Link": $url, "Secret Type": $type, "Commit": $commit, "Author": $author}' >> ./gitleaks-report.json
 
-    echo "," >> ./gitleaks-report.json
-done
-head -n $(($(wc -l < ./gitleaks-report.json) - 1)) ./gitleaks-report.json > ./temp.json && mv ./temp.json ./gitleaks-report.json
-echo "]" >> ./gitleaks-report.json
-cat ./gitleaks-report.json | jq > ./temp.json && mv ./temp.json ./gitleaks-report.json
+        echo "," >> ./gitleaks-report.json
+    done
+    head -n $(($(wc -l < ./gitleaks-report.json) - 1)) ./gitleaks-report.json > ./temp.json && mv ./temp.json ./gitleaks-report.json
+    echo "]" >> ./gitleaks-report.json
+    cat ./gitleaks-report.json | jq > ./temp.json && mv ./temp.json ./gitleaks-report.json
+else
+    echo "[]" > ./gitleaks-report.json
+fi
 
 echo "Script Execution Completed!"

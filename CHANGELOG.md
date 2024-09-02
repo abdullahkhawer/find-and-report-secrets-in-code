@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2024-09-02
+
+### 🚀 Features
+
+- Add GitHub workflow template to easily enable the tool in any GitHub repository and update the existing GitLab CI template which is used to easily enable the tool in any GitLab repository to changes its path, Docker image used and variables location.
+
+### 🐛 Bug Fixes
+
+- Add a condition to only update the HTML template and find unique commit authors when either Confluence is enabled or Slack is enabled.
+- Add a condition to only generate the custom report if 1 or more secrets are found.
+
+### 📚 Documentation
+
+- Update Docker README to fix the License reference.
+
 ## [1.2.0] - 2024-08-15
 
 ### 🚀 Features
