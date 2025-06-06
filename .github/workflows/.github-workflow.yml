@@ -34,6 +34,9 @@ on:
       SLACK_WEBHOOK_URL:
         description: "Slack Webhook URL (e.g., https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__)"
         required: true
+      SLACK_API_TOKEN:
+        description: "Slack API Token (e.g., xoxb-__REDACTED__-__REDACTED__-__REDACTED__)"
+        required: true
 
 jobs:
   find-and-report-secrets-in-code:
@@ -49,6 +52,7 @@ jobs:
         CONFLUENCE_PAGE_SPACE: ${{ inputs.CONFLUENCE_PAGE_SPACE }}
         SLACK_ENABLED: ${{ inputs.SLACK_ENABLED }}
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
         REMOTE_PATH_TO_GIT_REPO: ${{ github.server_url }}/${{ github.repository }}
         BRANCH_NAME: ${{ github.ref_name }}
         REPO_NAME: ${{ github.repository }}
