@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2025-06-06
+
+### 🚀 Features
+
+- Upgrade Gitleaks, add the capability to tag commit authors in Slack notification message, refactor code, fix bugs, and update READMEs accordingly.
+
 ## [1.3.0] - 2024-09-02
 
 ### 🚀 Features
