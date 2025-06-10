@@ -30,7 +30,7 @@
   stage: scan
   extends:
     - .find-secrets:variables
-  image: abdullahkhawer/find-and-report-secrets-in-code:1.3.0
+  image: abdullahkhawer/find-and-report-secrets-in-code:1.4.0
   before_script:
     - |
       if [ -n "$CONFLUENCE_ENABLED" ] && [ "$CONFLUENCE_ENABLED" -eq 1 ]; then
