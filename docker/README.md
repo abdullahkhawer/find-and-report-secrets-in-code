@@ -11,7 +11,7 @@
 
 # Supported tags and respective `Dockerfile` links
 
--	[`1.3.0`, `latest`](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/v1.3.0/docker/Dockerfile)
+-	[`1.4.0`, `latest`](https://github.com/abdullahkhawer/find-and-report-secrets-in-code/blob/v1.4.0/docker/Dockerfile)
 
 # Find and Report Secrets in Code
 
