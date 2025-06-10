@@ -40,9 +40,15 @@ Below you can find an example of the JSON report generated:
 
 Note: In the actual execution, you will see the actual values instead of `__REDACTED__` values.
 
-Below you can find an example of the Slack notification messages in case of both no secrets found and 1 or more secrets found:
+Below you can find examples of the Slack notification messages:
 
-![image](https://github.com/user-attachments/assets/0dfa93a5-bcc4-4370-8b25-1e30c783f059)
+In case of no secrets found:
+
+![363743722-0dfa93a5-bcc4-4370-8b25-1e30c783f059](https://github.com/user-attachments/assets/12224f0d-801e-401a-be87-2eea3ec172ae)
+
+In case of 1 or more secrets found:
+
+<img src="https://github.com/user-attachments/assets/ede58807-1317-4b51-a805-5d496dfc76a6"/>
 
 # Usage Notes
 
@@ -175,7 +181,7 @@ jobs:
       CONFLUENCE_USER_EMAIL_ID: ${{ secrets.CONFLUENCE_USER_EMAIL_ID }}
       CONFLUENCE_USER_TOKEN: ${{ secrets.CONFLUENCE_USER_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-	  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+      SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 ```
 
 In the `on` section, you specify events can cause the workflow to run. In the above example, the job is only allowed to execute if something is pushed to the `master` branch.
