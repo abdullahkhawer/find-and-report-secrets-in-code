@@ -42,7 +42,7 @@ jobs:
   find-and-report-secrets-in-code:
     runs-on: ubuntu-latest
     container:
-      image: abdullahkhawer/find-and-report-secrets-in-code:1.3.0
+      image: abdullahkhawer/find-and-report-secrets-in-code:1.4.0
       env:
         CONFLUENCE_ENABLED: ${{ inputs.CONFLUENCE_ENABLED }}
         CONFLUENCE_SITE: ${{ secrets.CONFLUENCE_SITE }}
