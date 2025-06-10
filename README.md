@@ -20,8 +20,9 @@ Below you can find an example of the JSON report generated:
     "Line No.": "11",
     "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/scripts/main.py#L11",
     "Secret Type": "generic-api-key",
-    "Commit": "__REDACTED__",
-    "Author": "__REDACTED__"
+    "Commit ID": "__REDACTED__",
+    "Commit Author": "__REDACTED__",
+    "Commit Author Email": "__REDACTED__"
   },
   {
     "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
@@ -29,8 +30,9 @@ Below you can find an example of the JSON report generated:
     "Line No.": "6",
     "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/configurations/main.tf#L6",
     "Secret Type": "hashicorp-tf-password",
-    "Commit": "__REDACTED__",
-    "Author": "__REDACTED__"
+    "Commit ID": "__REDACTED__",
+    "Commit Author": "__REDACTED__",
+    "Commit Author Email": "__REDACTED__"
   }
   ...
 ]
@@ -67,6 +69,8 @@ Following are the prerequisites to be met once before you begin:
          - Using `pip`
       - `requests`
          - Using `pip`
+      - `slack-sdk`
+         - Using `pip`
    - In case of macOS, install the following packages by running either `./installation/macos_install_packages.sh` script or by installing them manually:
       - `git`
       - `jq`
@@ -80,6 +84,8 @@ Following are the prerequisites to be met once before you begin:
          - Using `pip`
       - `requests`
          - Using `pip`
+      - `slack-sdk`
+         - Using `pip`
 - A Slack Webhook URL is created for the channel where you want to receive the alerts either using general incoming webhook or app incoming webhook.
 
 ### Execution Instructions
@@ -87,7 +93,7 @@ Following are the prerequisites to be met once before you begin:
 Once all the prerequisites are met, set the following environment variables:
    - `LOCAL_PATH_TO_GIT_REPO`
       - Description: Local path to the Git repository.
-      - Example: `/Users/Abdullah.Khawer/Desktop/my-projects/my-repo`
+      - Example: `/Desktop/my-projects/my-repo`
       - Requirement: REQUIRED
    - `REMOTE_PATH_TO_GIT_REPO`
       - Description: Remote path to the Git repository.
@@ -95,7 +101,7 @@ Once all the prerequisites are met, set the following environment variables:
       - Requirement: REQUIRED
    - `BRANCH_NAME`
       - Description: Name of the branch in the Git repository against which secrets detection tool will be executed.
-      - Example: `/Users/Abdullah.Khawer/Desktop/myrepo`
+      - Example: `master`
       - Requirement: REQUIRED
    - `CONFLUENCE_ENABLED`
       - Description: Whether to enable reporting on Atlassian Confluence or not.
@@ -104,14 +110,15 @@ Once all the prerequisites are met, set the following environment variables:
       - Possible Values: `1` or `0`
    - `CONFLUENCE_SITE`
       - Description: Atlassian Confluence host link.
-      - Example: `https://mydomain.atlassian.net`
+      - Example: `https://my-domain.atlassian.net`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_USER_EMAIL_ID`
       - Description: Atlassian Confluence user email ID.
-      - Example: `myname@mydomain.com`
+      - Example: `myname@my-domain.com`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_USER_TOKEN`
       - Description: Atlassian Confluence user token.
+	  - Example: `__REDACTED__`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_PAGE_TITLE`
       - Description: Atlassian Confluence page title.
@@ -128,7 +135,11 @@ Once all the prerequisites are met, set the following environment variables:
       - Possible Values: `1` or `0`
    - `SLACK_WEBHOOK_URL`
       - Description: Slack Webhook URL.
-      - Example: `[https://mydomain.atlassian.net](https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__)`
+      - Example: `https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__`
+      - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
+	- `SLACK_API_TOKEN`
+      - Description: Slack API Token.
+      - Example: `xoxb-__REDACTED__-__REDACTED__-__REDACTED__`
       - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
 
 And then simply run the following 2 commands:
@@ -164,6 +175,7 @@ jobs:
       CONFLUENCE_USER_EMAIL_ID: ${{ secrets.CONFLUENCE_USER_EMAIL_ID }}
       CONFLUENCE_USER_TOKEN: ${{ secrets.CONFLUENCE_USER_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+	  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 ```
 
 In the `on` section, you specify events can cause the workflow to run. In the above example, the job is only allowed to execute if something is pushed to the `master` branch.
@@ -194,6 +206,7 @@ find-and-report-secrets-in-code:
     CONFLUENCE_PAGE_SPACE: $CONFLUENCE_PAGE_SPACE
     SLACK_ENABLED: "1"
     SLACK_WEBHOOK_URL: $SLACK_WEBHOOK_URL
+    SLACK_API_TOKEN: $SLACK_API_TOKEN
   retry:
     max: 2
   rules:

@@ -20,6 +20,8 @@
     SLACK_ENABLED: "0"
     # Slack Webhook URL (e.g., https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__)
     SLACK_WEBHOOK_URL: ""
+    # Slack API Token (e.g., xoxb-__REDACTED__-__REDACTED__-__REDACTED__)
+    SLACK_API_TOKEN: ""
     REMOTE_PATH_TO_GIT_REPO: "${CI_PROJECT_URL}"
     BRANCH_NAME: "${CI_COMMIT_BRANCH}"
     REPO_NAME: "${CI_PROJECT_PATH}"
@@ -61,6 +63,11 @@
       if [ -n "$SLACK_ENABLED" ] && [ "$SLACK_ENABLED" -eq 1 ]; then
         if [ -z "$SLACK_WEBHOOK_URL" ]; then
           echo "SLACK_WEBHOOK_URL is empty or null. Exiting with error."
+          exit 1
+        fi
+
+        if [ -z "$SLACK_API_TOKEN" ]; then
+          echo "SLACK_API_TOKEN is empty or null. Exiting with error."
           exit 1
         fi
       fi

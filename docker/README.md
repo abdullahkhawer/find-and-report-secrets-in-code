@@ -33,8 +33,9 @@ Below you can find an example of the JSON report generated:
     "Line No.": "11",
     "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/scripts/main.py#L11",
     "Secret Type": "generic-api-key",
-    "Commit": "__REDACTED__",
-    "Author": "__REDACTED__"
+    "Commit ID": "__REDACTED__",
+    "Commit Author": "__REDACTED__",
+    "Commit Author Email": "__REDACTED__"
   },
   {
     "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
@@ -42,8 +43,9 @@ Below you can find an example of the JSON report generated:
     "Line No.": "6",
     "Link": "https://gitlab.com/my-projects/my-repo/-/blob/master/configurations/main.tf#L6",
     "Secret Type": "hashicorp-tf-password",
-    "Commit": "__REDACTED__",
-    "Author": "__REDACTED__"
+    "Commit ID": "__REDACTED__",
+    "Commit Author": "__REDACTED__",
+    "Commit Author Email": "__REDACTED__"
   }
   ...
 ]
@@ -64,7 +66,7 @@ Below you can find an example of the Slack notification messages in case of both
 Set the following environment variables:
    - `LOCAL_PATH_TO_GIT_REPO`
       - Description: Local path to the Git repository.
-      - Example: `/Users/Abdullah.Khawer/Desktop/my-projects/my-repo`
+      - Example: `/Desktop/my-projects/my-repo`
       - Requirement: REQUIRED
    - `REMOTE_PATH_TO_GIT_REPO`
       - Description: Remote path to the Git repository.
@@ -72,7 +74,7 @@ Set the following environment variables:
       - Requirement: REQUIRED
    - `BRANCH_NAME`
       - Description: Name of the branch in the Git repository against which secrets detection tool will be executed.
-      - Example: `/Users/Abdullah.Khawer/Desktop/myrepo`
+      - Example: `master`
       - Requirement: REQUIRED
    - `CONFLUENCE_ENABLED`
       - Description: Whether to enable reporting on Atlassian Confluence or not.
@@ -81,14 +83,15 @@ Set the following environment variables:
       - Possible Values: `1` or `0`
    - `CONFLUENCE_SITE`
       - Description: Atlassian Confluence host link.
-      - Example: `https://mydomain.atlassian.net`
+      - Example: `https://my-domain.atlassian.net`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_USER_EMAIL_ID`
       - Description: Atlassian Confluence user email ID.
-      - Example: `myname@mydomain.com`
+      - Example: `myname@my-domain.com`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_USER_TOKEN`
       - Description: Atlassian Confluence user token.
+	  - Example: `__REDACTED__`
       - Requirement: REQUIRED (if `CONFLUENCE_ENABLED` is set to `1`)
    - `CONFLUENCE_PAGE_TITLE`
       - Description: Atlassian Confluence page title.
@@ -105,11 +108,15 @@ Set the following environment variables:
       - Possible Values: `1` or `0`
    - `SLACK_WEBHOOK_URL`
       - Description: Slack Webhook URL.
-      - Example: `[https://mydomain.atlassian.net](https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__)`
+      - Example: `https://hooks.slack.com/services/__REDACTED__/__REDACTED__/__REDACTED__`
+      - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
+	- `SLACK_API_TOKEN`
+      - Description: Slack API Token.
+      - Example: `xoxb-__REDACTED__-__REDACTED__-__REDACTED__`
       - Requirement: REQUIRED (if `SLACK_ENABLED` is set to `1`)
 
 And then simply run the following 4 commands:
-- `docker run --platform linux/amd64 -it -e LOCAL_PATH_TO_GIT_REPO=$LOCAL_PATH_TO_GIT_REPO -e REMOTE_PATH_TO_GIT_REPO=$REMOTE_PATH_TO_GIT_REPO -e BRANCH_NAME=$BRANCH_NAME -e CONFLUENCE_ENABLED=$CONFLUENCE_ENABLED -e CONFLUENCE_SITE=$CONFLUENCE_SITE -e CONFLUENCE_USER_EMAIL_ID=$CONFLUENCE_USER_EMAIL_ID -e CONFLUENCE_USER_TOKEN=$CONFLUENCE_USER_TOKEN -e CONFLUENCE_PAGE_TITLE=$CONFLUENCE_PAGE_TITLE -e CONFLUENCE_PAGE_SPACE=$CONFLUENCE_PAGE_SPACE -e SLACK_ENABLED=$SLACK_ENABLED -e SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL -v $LOCAL_PATH_TO_GIT_REPO:$LOCAL_PATH_TO_GIT_REPO abdullahkhawer/find-and-report-secrets-in-code:latest`
+- `docker run --platform linux/amd64 -it -e LOCAL_PATH_TO_GIT_REPO=$LOCAL_PATH_TO_GIT_REPO -e REMOTE_PATH_TO_GIT_REPO=$REMOTE_PATH_TO_GIT_REPO -e BRANCH_NAME=$BRANCH_NAME -e CONFLUENCE_ENABLED=$CONFLUENCE_ENABLED -e CONFLUENCE_SITE=$CONFLUENCE_SITE -e CONFLUENCE_USER_EMAIL_ID=$CONFLUENCE_USER_EMAIL_ID -e CONFLUENCE_USER_TOKEN=$CONFLUENCE_USER_TOKEN -e CONFLUENCE_PAGE_TITLE=$CONFLUENCE_PAGE_TITLE -e CONFLUENCE_PAGE_SPACE=$CONFLUENCE_PAGE_SPACE -e SLACK_ENABLED=$SLACK_ENABLED -e SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL -e SLACK_API_TOKEN=$SLACK_API_TOKEN -v $LOCAL_PATH_TO_GIT_REPO:$LOCAL_PATH_TO_GIT_REPO abdullahkhawer/find-and-report-secrets-in-code:latest`
 - `export PATH=$PATH:/usr/local/gitleaks`
 - `bash /find-and-report-secrets-in-code/gitleaks.sh`
 - `python3 /find-and-report-secrets-in-code/main.py TIME_ZONE REPOSITORY_NAME BRANCH_NAME [JSON_REPORT_URL]`
@@ -143,6 +150,7 @@ jobs:
       CONFLUENCE_USER_EMAIL_ID: ${{ secrets.CONFLUENCE_USER_EMAIL_ID }}
       CONFLUENCE_USER_TOKEN: ${{ secrets.CONFLUENCE_USER_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 ```
 
 In the `on` section, you specify events can cause the workflow to run. In the above example, the job is only allowed to execute if something is pushed to the `master` branch.
@@ -173,6 +181,7 @@ find-and-report-secrets-in-code:
     CONFLUENCE_PAGE_SPACE: $CONFLUENCE_PAGE_SPACE
     SLACK_ENABLED: "1"
     SLACK_WEBHOOK_URL: $SLACK_WEBHOOK_URL
+    SLACK_API_TOKEN: $SLACK_API_TOKEN
   retry:
     max: 2
   rules:
