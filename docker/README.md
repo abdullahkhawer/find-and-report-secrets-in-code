@@ -61,7 +61,7 @@ In case of no secrets found:
 
 In case of 1 or more secrets found:
 
-<img src="https://github.com/user-attachments/assets/ede58807-1317-4b51-a805-5d496dfc76a6"/>
+<img src="https://github.com/user-attachments/assets/8aedc450-01d8-4a00-83d0-5e18e4baf59c" />
 
 # Usage Notes
 
